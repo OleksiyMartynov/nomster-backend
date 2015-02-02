@@ -1,0 +1,28 @@
+<html>
+<head>
+
+<script>
+function getStateValue()
+{
+	return Math.random();
+}
+function getGoogleUrl()
+{
+	return 'https://accounts.google.com/o/oauth2/auth'
+	+'?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login'
+	+'&state='+getStateValue()
+	+'&redirect_uri=http://nomster-backend.appspot.com/oauth2callback'
+	+'&response_type=code'
+	+'&client_id=453077549340-0mbc5et33d267m2eg292sv19362ohosa.apps.googleusercontent.com'
+	+'&access_type=offline';
+}
+function main()
+{
+	document.getElementById("myButton").href = getGoogleUrl();
+}
+</script>
+</head>
+<body onload="main();">
+<a id="myButton" href=>Sign in</a>
+</body>
+</html>

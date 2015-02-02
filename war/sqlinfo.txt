@@ -1,0 +1,100 @@
+-- ---
+-- Globals
+-- ---
+
+-- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- ---
+-- Table 'user'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `user`;
+		
+CREATE TABLE `user` (
+  `account` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`account`)
+);
+
+-- ---
+-- Table 'group'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `group`;
+		
+CREATE TABLE `group` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'group_user'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `group_user`;
+		
+CREATE TABLE `group_user` (
+  `group_fk` INTEGER NOT NULL,
+  `account_fk` VARCHAR(128) NOT NULL,
+KEY (`group_fk`),
+KEY (`account_fk`)
+);
+
+-- ---
+-- Table 'push'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `push`;
+		
+CREATE TABLE `push` (
+  `push_id` VARCHAR(128) NOT NULL,
+  `account_fk` VARCHAR(128) NOT NULL,
+KEY (`account_fk`)
+);
+
+-- ---
+-- Foreign Keys 
+-- ---
+
+ALTER TABLE `group_user` ADD FOREIGN KEY (group_fk) REFERENCES `group` (`id`);
+ALTER TABLE `group_user` ADD FOREIGN KEY (account_fk) REFERENCES `user` (`account`);
+ALTER TABLE `push` ADD FOREIGN KEY (account_fk) REFERENCES `user` (`account`);
+
+-- ---
+-- Table Properties
+-- ---
+
+-- ALTER TABLE `user` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `group` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `group_user` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `push` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+-- ---
+-- Test Data
+-- ---
+
+INSERT INTO `user` (`account`) VALUES
+('3martynov@gmail.com');
+ INSERT INTO `group` (`name`) VALUES
+('lunch group');
+INSERT INTO `group_user` (`group_fk`,`account_fk`) VALUES
+('1','3martynov@gmail.com');
+INSERT INTO `push` (`push_id`,`account_fk`) VALUES
+('123456789abcdefghijklmnopqrstuvwxyz','3martynov@gmail.com');
+
+
+
+-- ---
+-- Test Read
+-- ---
+
+SELECT * FROM `user`;
+SELECT * FROM `group`;
+SELECT * FROM `group_user`;
+SELECT * FROM `push`;
