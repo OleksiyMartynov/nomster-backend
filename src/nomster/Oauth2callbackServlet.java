@@ -20,13 +20,7 @@ public class Oauth2callbackServlet extends HttpServlet
 	    out.println("get");
 	    out.println(req.getSession().getId());
 	    if(req.getParameter("state")!=null)
-	    {	    	
-	    	Cookie[] cookies =req.getCookies();
-	    	for(int i=0; i<cookies.length; i++)
-	    	{
-	    		out.println(cookies[i].getName());
-	    		out.println(cookies[i].getValue());
-	    	}
+	    {	   	
 	    	if(req.getParameter("state").equals(req.getSession().getId()))
 		    {
 		    	out.println("valid login from session");		    	
