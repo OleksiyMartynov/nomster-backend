@@ -3,6 +3,7 @@
   <application>nomster-backend</application>
   <version>1</version>
   <use-google-connector-j>true</use-google-connector-j>
+
   <!--
     Allows App Engine to send multiple requests to one instance in parallel:
   -->

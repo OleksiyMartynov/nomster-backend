@@ -1,3 +1,4 @@
+<%@page import="nomster.MyConstants"%>
 <%@page import="java.security.SecureRandom"%>
 <%@page import="java.math.BigInteger"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -21,12 +22,12 @@ function getStateValue()
 function getGoogleUrl()
 {
 	return 'https://accounts.google.com/o/oauth2/auth'
-	+'?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login'
+	+'?scope=openid%20email'
 	+'&state=<%  out.print(request.getSession().getId()); session.setAttribute("state", session.getId()); %>'
-	+'&redirect_uri=http://nomster-backend.appspot.com/oauth2callback'
-	+'&response_type=code'
-	+'&client_id=453077549340-0mbc5et33d267m2eg292sv19362ohosa.apps.googleusercontent.com'
-	+'&access_type=offline';
+	+'&redirect_uri=<%=MyConstants.REDIRECT_URI%>'
+	+'&response_type=<%=MyConstants.RESPONSE_TYPE%>'
+	+'&client_id=<%=MyConstants.CLIENT_ID%>'
+	+'&access_type=<%=MyConstants.ACCESS_TYPE%>';
 }
 function main()
 {
