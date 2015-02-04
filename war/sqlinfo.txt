@@ -1,3 +1,7 @@
+
+
+
+
 -- ---
 -- Globals
 -- ---
@@ -14,7 +18,9 @@ DROP TABLE IF EXISTS `user`;
 		
 CREATE TABLE `user` (
   `account` VARCHAR(128) NOT NULL,
-  PRIMARY KEY (`account`)
+  `login_type` TINYINT NOT NULL,
+  PRIMARY KEY (`account`),
+KEY (`login_type`)
 );
 
 -- ---
@@ -25,9 +31,9 @@ CREATE TABLE `user` (
 DROP TABLE IF EXISTS `group`;
 		
 CREATE TABLE `group` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `group_id` INTEGER NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(64) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`group_id`)
 );
 
 -- ---
@@ -54,16 +60,50 @@ DROP TABLE IF EXISTS `push`;
 CREATE TABLE `push` (
   `push_id` VARCHAR(128) NOT NULL,
   `account_fk` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`push_id`),
 KEY (`account_fk`)
+);
+
+-- ---
+-- Table 'login_types'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `login_types`;
+		
+CREATE TABLE `login_types` (
+  `login_type_id` TINYINT NOT NULL AUTO_INCREMENT,
+  `login_type_name` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`login_type_id`)
+);
+
+-- ---
+-- Table 'google_data'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `google_data`;
+		
+CREATE TABLE `google_data` (
+  `sub` VARCHAR(86) NOT NULL,
+  `account_fk` VARCHAR(128) NOT NULL,
+  `access_token` VARCHAR(84) NOT NULL,
+  `expires_in` MEDIUMINT NOT NULL,
+  `token_type` VARCHAR(64) NOT NULL,
+  `refresh_token` VARCHAR(86) NOT NULL,
+  `access_token_recieved_date` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`sub`)
 );
 
 -- ---
 -- Foreign Keys 
 -- ---
 
-ALTER TABLE `group_user` ADD FOREIGN KEY (group_fk) REFERENCES `group` (`id`);
+ALTER TABLE `user` ADD FOREIGN KEY (login_type) REFERENCES `login_types` (`login_type_id`);
+ALTER TABLE `group_user` ADD FOREIGN KEY (group_fk) REFERENCES `group` (`group_id`);
 ALTER TABLE `group_user` ADD FOREIGN KEY (account_fk) REFERENCES `user` (`account`);
 ALTER TABLE `push` ADD FOREIGN KEY (account_fk) REFERENCES `user` (`account`);
+ALTER TABLE `google_data` ADD FOREIGN KEY (account_fk) REFERENCES `user` (`account`);
 
 -- ---
 -- Table Properties
@@ -73,28 +113,26 @@ ALTER TABLE `push` ADD FOREIGN KEY (account_fk) REFERENCES `user` (`account`);
 -- ALTER TABLE `group` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `group_user` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `push` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
+-- ALTER TABLE `login_types` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `google_data` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ---
 -- Test Data
 -- ---
-
-INSERT INTO `user` (`account`) VALUES
-('3martynov@gmail.com');
- INSERT INTO `group` (`name`) VALUES
-('lunch group');
-INSERT INTO `group_user` (`group_fk`,`account_fk`) VALUES
-('1','3martynov@gmail.com');
-INSERT INTO `push` (`push_id`,`account_fk`) VALUES
-('123456789abcdefghijklmnopqrstuvwxyz','3martynov@gmail.com');
-
+INSERT INTO `login_types` (`login_type_name`) VALUES ('googleplus');
+INSERT INTO `user` (`account`,`login_type`) VALUES ('3martynov@gmail.com',1);
+INSERT INTO `group` (`name`) VALUES ('work group');
+INSERT INTO `group_user` (`group_fk`,`account_fk`) VALUES (1,'3martynov@gmail.com');
+INSERT INTO `push` (`push_id`,`account_fk`) VALUES ('dfasfasfasdfasfasf','3martynov@gmail.com');
+INSERT INTO `google_data` (`sub`,`account_fk`,`access_token`,`expires_in`,`token_type`,`refresh_token`,`access_token_recieved_date`) VALUES ('115033584257748466608','3martynov@gmail.com','ya29.EAFPQeEwB-BXfZqOVFr_4AwxNRqwNYBfozH2E-uIOeaC_a4AzsunVdDo_FIk16vOREMVRnPKfk_qug','3600','Bearer','4/WFu2EU-gaCQJ32fYdnyopE78xHiGJ57QCKllXEgrhFU.QhbFOwJbeFcQXmXvfARQvtgmyO6klgI','2/3/2015 10:44:00pm');
 
 
 -- ---
 -- Test Read
 -- ---
-
 SELECT * FROM `user`;
+SELECT * FROM `login_types`;
 SELECT * FROM `group`;
 SELECT * FROM `group_user`;
 SELECT * FROM `push`;
+SELECT * FROM `google_data`;
