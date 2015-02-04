@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import other.MyUtils;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -45,15 +47,22 @@ public class Oauth2callbackServlet extends HttpServlet
 				    	String accessToken=MyUtils.getStringFromJSONString(jsonStr, "access_token");
 				    	out.println("access_token:"+accessToken);
 				    	String idToken = MyUtils.getStringFromJSONString(jsonStr, "id_token");
-				    	out.println("id_token:"+idToken);
-				    	//String decodedData =new String(DatatypeConverter.parseBase64Binary(idToken));
-				    	out.println("sub:"+tokenDecode(idToken).get("sub"));
+				    	out.println("id_token:"+idToken);				    	
 				    	String expiresIn=MyUtils.getStringFromJSONString(jsonStr, "expires_in");
 				    	out.println("expires_in:"+expiresIn);
 				    	String tokenType=MyUtils.getStringFromJSONString(jsonStr, "token_type");
 				    	out.println("token_type:"+tokenType);
 				    	String refreshToken=MyUtils.getStringFromJSONString(jsonStr, "refresh_token");	
-				    	out.println("refresh_token:"+refreshToken);	
+				    	out.println("refresh_token:"+refreshToken);
+				    	out.println("=====");
+				    	//String decodedData =new String(DatatypeConverter.parseBase64Binary(idToken));
+				    	GoogleIdToken.Payload p = tokenDecode(idToken);
+				    	out.println("iss:"+p.get("iss"));//The Issuer Identifier for the Issuer of the response.
+				    	out.println("sub:"+p.get("sub"));//An identifier for the user, unique among all Google accounts.
+				    	out.println("email:"+p.get("email"));
+				    	out.println("aud:"+p.get("aud"));//Identifies the audience that this ID token is intended for. It must be one of the OAuth 2.0 client IDs of your application.
+				    	out.println("iat:"+p.get("iat"));
+				    	out.println("exp:"+p.get("exp"));
 			    	}
 			    		
 		    	}catch(Exception e)
